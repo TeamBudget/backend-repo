@@ -1,0 +1,32 @@
+{
+  "name": "graphql-apollo-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index",
+    "start": "node index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "apollo-server": "^2.18.2",
+    "apollo-server-express": "^2.21.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express-jwt": "^6.0.0",
+    "firebase": "^8.2.9",
+    "graphql": "^15.3.0",
+    "graphql-playground-middleware-express": "^1.7.22",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "react-icons": "^4.1.0",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.1"
+  }
+}
