@@ -5,7 +5,8 @@ const accountSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'users'
     }, 
-         members:[{
+    title:String,     
+    members:[{
             type:Schema.Types.ObjectId,
             ref:'users'
          }],

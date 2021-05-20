@@ -21,6 +21,7 @@ function generateToken(user){
         id: user._id,
         email:user.email,
         username:user.username,
+        profileImageUrl:user.profileImageUrl
         },SECRET_KEY,{expiresIn:'1h'});
 }
 
@@ -76,6 +77,13 @@ module.exports = {
                  maxAge:1000 * 60 * 60 * 24 * 7 // 7 days    
 
              });
+
+             res.cookie("id2", user._id, {
+                httpOnly:false,
+                secure:false,
+                maxAge:1000 * 60 * 60 * 24 * 7 // 7 days    
+
+            });  
                 
            
              return {...user._doc, id: user._id,token, firebase_user_id:userDetails.user.uid}
@@ -125,6 +133,7 @@ module.exports = {
                 username,
                 password,
                 confirmPassword,
+                profileImageUrl:'',
                 firebase_user_id:userF.user.uid,
             });
 
@@ -154,24 +163,73 @@ module.exports = {
                     console.log(err);
 
                 }
-            }
+            },
 
 
-        
+            async logout(_,__,{res,___}){
+                const ifUserConnected = await ifUserLoggedin()
+                try{
+                    if(ifUserConnected){
+                        await auth.signOut();
+                        res.clearCookie("id");
+                        res.clearCookie("id2");
+                         return "logout successfully!"
+                    }   
+                   return "you are already log out!"
+                       
+                }catch(err){
+                    console.log(err);
+                }
 
-       },
+            },
+
+            async updateUserProfile(_,{profileImage},context){
+                 const userId = context.req.user.id
+                    
+                 try{
+                     
+
+                    const user = await User.findById(userId);
+                    if(user){
+
+
+                        user.profileImageUrl = profileImage
+
+                        await user.save()
+
+                        const token = generateToken(user);
+         
+                        context.res.cookie("id", token, {
+                                httpOnly:true,
+                                secure:false,
+                                maxAge:1000 * 60 * 60 * 24 * 7 // 7 days    
+
+                            });
+
+                       
+                       
+                       
+                       
+                        return user;
+
+                    }
+
+                 }catch(err){
+                      console.log(err);
+                 }
+                  
+          
+          
+          
+                }
+
+          },
 
 
        Query:{
         async getUserState(_,__,context){
-            let InitialState = {
-                email:null,
-                uid:null,
-                username:null,
-
-            } 
-          
-            try{        
+           
+           try{        
         const ifUserConnected = await ifUserLoggedin()
               console.log("firebase login",ifUserConnected);    
             if(ifUserConnected){
@@ -183,9 +241,11 @@ module.exports = {
                 });  
                 return {...context.req.user}
             }else{
+                
                 context.res.clearCookie("id");
                 context.res.clearCookie("id2");
-               return null;
+                console.log("user is log out!");
+                return null;
                
               
             }

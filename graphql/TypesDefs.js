@@ -42,6 +42,7 @@ type User{
     token:String!
     username:String!
     firebase_user_id:ID!
+    profileImageUrl:String!
     createdAt:String!
 }
 
@@ -49,10 +50,11 @@ type User{
 type Account{
      id:ID!
      owner:ID!
+     title:String!
      list:[ItemList]!
      createdAt:String!
      updatedAt:String!
-
+     
 }
  
 type ItemList {
@@ -73,6 +75,7 @@ type userState{
     email:String
     id:String
     username:String
+    profileImageUrl:String!
 }
 
 
@@ -89,25 +92,36 @@ type Query{
      
      getUserState:userState
      
+     getUserAccounts:[Account!]!
+     getUserAccount(accountId:ID!):Account!
     }
 
  type Mutation{
     register(registerInput:RegisterInput):User!
     login(username:String!, password:String!):User!
     resetPassword(email:String!):message
+    logout:String!
+
     
-    createPost(title:String!, body:String!, imagePost:String!):Post!      
-    deletePost(postId:ID!):String!
-    createComment(postId:ID!, body:String!):Post!
-    deleteComment(postId:ID!, commentId:ID!):Post!
     likePost(postId:ID!):Post!
     
+    
+    createAccount(title:String!):Account!
+    updateAccount(accountId:ID!,title:String!):Account!
+    deleteAccount(accountId:ID!):String!
+
+
+
     addItem(accountId:ID!, title:String!, description:String!,media:String,amount:Float):Account!
+    updateItem(accountId:ID!, itemId:ID!, title:String!, description:String!, amount:Float):Account!
     deleteItem(accountId:ID!, itemId:ID!):Account!
+    addItemImage(accountId:ID!, itemId:ID!, imageURL:String!):Boolean!
+    deleteItemImage(accountId:ID!, itemId:ID!):Boolean!
 
-   
 
-    uploadFile(file:Upload!): imageDetails!
+    updateUserProfile(profileImage:String!):User!
+    
+    uploadFile(file:Upload!):String!
 }
 
 type Subscription{

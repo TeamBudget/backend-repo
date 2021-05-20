@@ -5,6 +5,7 @@ const userSchema = new Schema({
       password:String,
       email:String,
       firebase_user_id:String,
+      profileImageUrl:String
 
 });
 
